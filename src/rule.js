@@ -14,6 +14,37 @@
 //
 
 // const cards = require('../src/cards')
-import cards from './cards.mjs'
+const cards = require('./constants/cards');
 
-console.log(cards.clubAce.name);
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); // 0 이상 i 이하의 난수
+        [array[i], array[j]] = [array[j], array[i]]; // 요소 위치를 바꿈
+    }
+} // 덱 내의 카드를 셔플하는 함수.
+
+
+// 게임에 사용되는 카드가 담긴 덱
+const deck = []
+
+//딜러의 핸드 카드
+const dealerHand = []
+
+// 플레이어의 핸드 카드
+const playerHand = []
+
+
+
+for ( i = 0; i < 6; i++) {
+    for (const cardKey in cards) {
+        if (cards.hasOwnProperty(cardKey)) {
+            deck.push(cards[cardKey]);
+        }
+    }
+}
+
+shuffleArray(deck)
+
+console.log(deck)
+
+

@@ -1,4 +1,4 @@
-const cards = {
+module.exports = {
 
     spadeAce : {
         name : "♠A",
@@ -314,5 +314,3 @@ const cards = {
     
 
 }
-
-export default cards
