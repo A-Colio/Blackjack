@@ -14,6 +14,97 @@
 //
 
 // const cards = require('../src/cards')
+
+const cards = require('./constants/cards');
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function createDeck(numDecks = 1) {
+    const deck = [];
+    for (let i = 0; i < numDecks; i++) {
+        for (const cardKey in cards) {
+            if (cards.hasOwnProperty(cardKey)) {
+                deck.push(cards[cardKey]);
+            }
+        }
+    }
+    return deck;
+}
+
+function getCardValue(card) {
+    if (Array.isArray(card.number)) {
+        return card.number[1];
+    }
+    return card.number;
+}
+
+function handValue(hand) {
+    let total = 0;
+    let aces = 0;
+
+    for (let card of hand) {
+        total += getCardValue(card);
+        if (Array.isArray(card.number)) {
+            aces++;
+        }
+    }
+
+    while (total > 21 && aces > 0) {
+        total -= 10;
+        aces--;
+    }
+
+    return total;
+}
+
+function resetDeck() {
+    deck.length = 0;
+    const newDeck = createDeck(6);
+    deck.push(...newDeck);
+}
+
+// 게임에 사용되는 카드가 담긴 덱
+const deck = [];
+
+// 딜러의 핸드 카드
+const dealerHand = [];
+
+// 플레이어의 핸드 카드
+const playerHand = [];
+
+resetDeck(); // 시작할 때 6개의 덱을 생성하고 셔플
+shuffleArray(deck);
+
+console.log(deck);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 const cards = require('./constants/cards');
 
 function shuffleArray(array) {
@@ -46,5 +137,4 @@ for ( i = 0; i < 6; i++) {
 shuffleArray(deck)
 
 console.log(deck)
-
-
+*/
