@@ -11,7 +11,7 @@ const suitToName = {
 
 // 각 카드의 값과 해당 값의 점수를 나타내는 배열
 const values = [
-    {name: 'a', number: [1, 11]},
+    {name: 'A', number: [1, 11]},
     {name: '2', number: 2},
     {name: '3', number: 3},
     {name: '4', number: 4},
@@ -21,9 +21,9 @@ const values = [
     {name: '8', number: 8},
     {name: '9', number: 9},
     {name: '10', number: 10},
-    {name: 'j', number: 10},
-    {name: 'q', number: 10},
-    {name: 'k', number: 10},
+    {name: 'J', number: 10},
+    {name: 'Q', number: 10},
+    {name: 'K', number: 10},
 ];
 
 // 모든 카드를 저장할 객체
