@@ -15,126 +15,92 @@
 
 // const cards = require('../src/cards')
 
-const cards = require('./constants/cards');
+import { Deck } from './deck.js'; // Deck 파일의 경로를 지정해주세요.
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+class Rule {
+    constructor() {
+        this.deck = new Deck(); // 6팩의 카드 덱을 생성
     }
-}
 
-function createDeck(numDecks = 1) {
-    const deck = [];
-    for (let i = 0; i < numDecks; i++) {
-        for (const cardKey in cards) {
-            if (cards.hasOwnProperty(cardKey)) {
-                deck.push(cards[cardKey]);
+    isBlackjack(cards) {
+        // 두 카드로 블랙잭인지 확인하는 로직
+        if (cards.length !== 2) return false;
+        const values = cards.map(card => card.number);
+        return (values.includes(10) && values.includes([1, 11]));
+    }
+
+    getTotalValue(cards) {
+        // 카드 합계 계산 로직
+        let total = 0;
+        let acesCount = 0;
+
+        for (const card of cards) {
+            if (Array.isArray(card.number)) { // Ace의 경우
+                total += 11; // 우선 Ace를 11로 간주
+                acesCount++;
+            } else {
+                total += card.number;
             }
         }
-    }
-    return deck;
-}
 
-function getCardValue(card) {
-    if (Array.isArray(card.number)) {
-        return card.number[1];
-    }
-    return card.number;
-}
-
-function handValue(hand) {
-    let total = 0;
-    let aces = 0;
-
-    for (let card of hand) {
-        total += getCardValue(card);
-        if (Array.isArray(card.number)) {
-            aces++;
+        // 버스트 상황에서 Ace가 있다면 11 대신 1로 간주
+        while (total > 21 && acesCount > 0) {
+            total -= 10; // 11에서 1을 뺌
+            acesCount--;
         }
+
+        return total;
     }
 
-    while (total > 21 && aces > 0) {
-        total -= 10;
-        aces--;
+    isBusted(cards) {
+        // 카드 합계가 21을 초과하는지 확인하는 로직
+        return this.getTotalValue(cards) > 21;
     }
 
-    return total;
+    // 추가적인 규칙들을 여기에 구현...
 }
 
-function resetDeck() {
-    deck.length = 0;
-    const newDeck = createDeck(6);
-    deck.push(...newDeck);
-}
-
-// 게임에 사용되는 카드가 담긴 덱
-const deck = [];
-
-// 딜러의 핸드 카드
-const dealerHand = [];
-
-// 플레이어의 핸드 카드
-const playerHand = [];
-
-resetDeck(); // 시작할 때 6개의 덱을 생성하고 셔플
-shuffleArray(deck);
-
-console.log(deck);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default Rule;
 
 
 
 /*
-const cards = require('./constants/cards');
+const { createDeck, getCurrentDeck } = require('./deck');
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1)); // 0 이상 i 이하의 난수
-        [array[i], array[j]] = [array[j], array[i]]; // 요소 위치를 바꿈
-    }
-} // 덱 내의 카드를 셔플하는 함수.
+// 현재 게임에서 사용되는 카드 덱
+let deck = createDeck(6);
 
+// 딜러와 플레이어의 핸드 (패)
+const dealerHand = [];
+const playerHand = [];
 
-// 게임에 사용되는 카드가 담긴 덱
-const deck = []
+// 카드를 한 장 뽑아 주어진 핸드에 추가하는 함수
+function dealCard(hand) {
+    const card = deck.pop();  // 덱의 맨 마지막 카드를 뽑음
+    hand.push(card);          // 주어진 핸드에 카드를 추가
+}
 
-//딜러의 핸드 카드
-const dealerHand = []
-
-// 플레이어의 핸드 카드
-const playerHand = []
-
-
-
-for ( i = 0; i < 6; i++) {
-    for (const cardKey in cards) {
-        if (cards.hasOwnProperty(cardKey)) {
-            deck.push(cards[cardKey]);
-        }
+// 게임 시작 시 초기 카드 분배
+function dealInitialCards() {
+    for (let i = 0; i < 2; i++) {
+        dealCard(playerHand);  // 플레이어에게 카드 한 장
+        dealCard(dealerHand);  // 딜러에게 카드 한 장
     }
 }
 
-shuffleArray(deck)
+// 게임을 초기화하고 시작하는 함수
+function startGame() {
+    deck = createDeck(6);  // 새로운 덱 생성
+    dealerHand.length = 0; // 딜러 핸드 초기화
+    playerHand.length = 0; // 플레이어 핸드 초기화
+    dealInitialCards();    // 초기 카드 분배
+    console.log("Player's Hand:", playerHand);
+    console.log("Dealer's Hand:", dealerHand);
+}
 
-console.log(deck)
+module.exports = {
+    startGame: startGame
+};
+
+startGame();
 */
